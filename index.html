@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria da Congregação</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+    h1 { text-align: center; color: #333; }
+    .filters { text-align: center; margin-bottom: 20px; }
+    select { padding: 5px 10px; margin: 0 5px; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+    .thumbnail { cursor: pointer; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .thumbnail img { width: 100%; height: auto; display: block; }
+
+    /* Lightbox */
+    .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 1000; }
+    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+    .lightbox:target { display: flex; }
+  </style>
+</head>
+<body>
+  <h1>Galeria da Congregação</h1>
+
+  <div class="filters">
+    <select id="eventoFiltro">
+      <option value="todos">Todos os eventos</option>
+      <option value="batismo">Batismo</option>
+      <option value="congresso">Congresso</option>
+    </select>
+
+    <select id="anoFiltro">
+      <option value="todos">Todos os anos</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+    </select>
+
+    <select id="mesFiltro">
+      <option value="todos">Todos os meses</option>
+      <option value="setembro">Setembro</option>
+      <option value="outubro">Outubro</option>
+    </select>
+  </div>
+
+  <div class="gallery" id="galeria">
+    <!-- Miniatura exemplo -->
+    <div class="thumbnail" data-evento="batismo" data-ano="2023" data-mes="setembro">
+      <a href="#img1"><img src="https://i.imgur.com/rOtaWvZ.jpeg" alt="Batismo Setembro 2023"></a>
+    </div>
+
+    <div class="lightbox" id="img1">
+      <a href="#">
+        <img src="https://i.imgur.com/RaVXpuG.jpeg" alt="Batismo Setembro 2023">
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const eventoFiltro = document.getElementById('eventoFiltro');
+    const anoFiltro = document.getElementById('anoFiltro');
+    const mesFiltro = document.getElementById('mesFiltro');
+
+    function filtrarGaleria() {
+      const evento = eventoFiltro.value;
+      const ano = anoFiltro.value;
+      const mes = mesFiltro.value;
+      const imagens = document.querySelectorAll('.gallery .thumbnail');
+
+      imagens.forEach(img => {
+        const matchEvento = evento === 'todos' || img.dataset.evento === evento;
+        const matchAno = ano === 'todos' || img.dataset.ano === ano;
+        const matchMes = mes === 'todos' || img.dataset.mes === mes;
+
+        img.style.display = (matchEvento && matchAno && matchMes) ? 'block' : 'none';
+      });
+    }
+
+    eventoFiltro.addEventListener('change', filtrarGaleria);
+    anoFiltro.addEventListener('change', filtrarGaleria);
+    mesFiltro.addEventListener('change', filtrarGaleria);
+  </script>
+</body>
+</html>
